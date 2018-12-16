@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\CY.Application\CY.Application.csproj" />
     <ProjectReference Include="..\src\CY.Core\CY.Core.csproj" />
   </ItemGroup>
 
