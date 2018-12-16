@@ -8,3 +8,7 @@
 /FinalProject/src/CY.Core/obj
 /FinalProject/FinalProject/obj
 /FinalProject/src/CY.Core/CY.Core.csproj
+/FinalProject/src/CY.Core/Const/ConnectionString.cs
+/FinalProject/src/CY.Application/bin/Debug/netcoreapp2.1
+/FinalProject/src/CY.Application/obj/Debug/netcoreapp2.1
+/FinalProject/src/CY.Application/obj
