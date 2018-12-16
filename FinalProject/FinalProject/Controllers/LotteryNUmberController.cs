@@ -8,6 +8,7 @@ using CY.Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using CY.Core.Models;
 using CY.Core.DataParsing;
+using CY.Core.Repository;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,13 +18,17 @@ namespace FinalProject.Controllers
     {
 
         LotteryDataRegularization _lotteryDataRegularization;
-        PrizeNumber _prizeNumber;
+        PrizeNumberType _prizeNumber;
         List<string> _prizeNumberList;
+        private EFPrizeNumberRepository _eFPrizeNumberRepository;
+        PrizeNumberDto _prizeNumberDto;
         public LotteryNumberController()
         {
             _lotteryDataRegularization = new LotteryDataRegularization();
-            _prizeNumber = new PrizeNumber();
+            _prizeNumber = new PrizeNumberType();
             _prizeNumberList = new List<string>();
+            _eFPrizeNumberRepository = new EFPrizeNumberRepository();
+            _prizeNumberDto = new PrizeNumberDto();
         }
         // GET: /<controller>/
         [HttpGet]
@@ -34,6 +39,8 @@ namespace FinalProject.Controllers
             if (_prizeNumberList != null && _prizeNumberList.Count != 0)
             {
                 _prizeNumberList = _lotteryDataRegularization.regularString(_prizeNumberList);
+                month = _lotteryDataRegularization.regularizeMonth(month);
+                saveData(year, month);
                 _prizeNumber.SpecialPrize = _prizeNumberList[0];
                 _prizeNumber.GrandPrize = _prizeNumberList[1];
                 _prizeNumber.FirstPrize = new List<string>();
@@ -62,7 +69,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult CheckLottery(UserInfo userInfo)
+        public IActionResult CheckLottery(PrizeNumberInfo userInfo)
         {
             #region Variable
             LotteryNumberJudgment lotteryNumber;
@@ -77,7 +84,7 @@ namespace FinalProject.Controllers
             {
                 _prizeNumberList = _lotteryDataRegularization.regularString(_prizeNumberList);
                 userData = new List<string>();
-                userData = _lotteryDataRegularization.processUserData(userInfo.UserLotteryNumbernth);
+                userData = _lotteryDataRegularization.processUserData(userInfo.LotteryNumberInfo);
                 lotteryNumber = new LotteryNumberJudgment(userData);
                 result = new Dictionary<string, int>();
                 userResponse = new UserResponse();
@@ -105,7 +112,25 @@ namespace FinalProject.Controllers
             }
         }
 
-        private void showPrizeInfo(PrizeNumber prizeNumber)
+        private void  saveData(string year, string month)
+        {
+            var IsDataExist = _eFPrizeNumberRepository.IsDataExist(year, month);
+            if (!IsDataExist)
+            {
+                string prizeNumberString = "";
+                foreach (var prizeNumber in _prizeNumberList)
+                {
+                    prizeNumberString += prizeNumber;
+                    prizeNumberString += " ";
+                }
+                _prizeNumberDto.LotteryNumberInfo = prizeNumberString;
+                _prizeNumberDto.Year = year;
+                _prizeNumberDto.Month = month;
+                _eFPrizeNumberRepository.Insert(_prizeNumberDto);
+            }
+        }
+
+        private void showPrizeInfo(PrizeNumberType prizeNumber)
         {
             ViewBag.SpecialPrize = prizeNumber.SpecialPrize;
             ViewBag.GrandPrize = prizeNumber.GrandPrize;

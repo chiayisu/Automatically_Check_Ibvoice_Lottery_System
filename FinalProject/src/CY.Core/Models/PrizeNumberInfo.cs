@@ -4,13 +4,13 @@ using System.Text;
 
 namespace CY.Core.Models
 {
-    public class UserInfo
+    public class PrizeNumberInfo
     {
-
         private string _year;
         private string _month;
-        private string _userLotteryNumber;
-        public UserInfo() { }
+        private string _lotteryNumberInfo;
+        public PrizeNumberInfo() { }
+
         public string Year
         {
             get
@@ -35,15 +35,15 @@ namespace CY.Core.Models
             }
         }
 
-        public string UserLotteryNumbernth
+        public string LotteryNumberInfo
         {
             get
             {
-                return _userLotteryNumber;
+                return _lotteryNumberInfo;
             }
             set
             {
-                _userLotteryNumber = value;
+                _lotteryNumberInfo = value;
             }
         }
     }

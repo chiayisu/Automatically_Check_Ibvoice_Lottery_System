@@ -4,13 +4,13 @@ using System.Text;
 
 namespace CY.Core.Models
 {
-    public class PrizeNumber
+    public class PrizeNumberType
     {
         private string _specialPrize;
         private string _grandPrize;
         private List<string> _firstPrize;
         private List<string> _addtionalSixthPrize;
-        public PrizeNumber() { }
+        public PrizeNumberType() { }
         public string SpecialPrize
         {
             get
