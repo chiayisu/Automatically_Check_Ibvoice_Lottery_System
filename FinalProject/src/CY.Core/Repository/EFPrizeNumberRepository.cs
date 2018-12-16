@@ -22,9 +22,8 @@ namespace CY.Core.Repository
 
         public string Select(string year, string month)
         {
-
             var result = new PrizeNumberDto();
-           var query = PrizeNumberDbContext.InvoiceLottery.AsQueryable();
+            var query = PrizeNumberDbContext.InvoiceLottery.AsQueryable();
             var temp = query.Where(x => x.Year == year && x.Month == month).ToList();
             if (temp.Count > 0 && temp != null)
                 result = temp[0];

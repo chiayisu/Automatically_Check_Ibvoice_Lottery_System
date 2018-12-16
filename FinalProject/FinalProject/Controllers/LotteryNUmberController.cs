@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using CY.Core.Models;
 using CY.Core.DataParsing;
 using CY.Core.Repository;
+using CY.Application.Service;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,6 +23,7 @@ namespace FinalProject.Controllers
         List<string> _prizeNumberList;
         private EFPrizeNumberRepository _eFPrizeNumberRepository;
         PrizeNumberDto _prizeNumberDto;
+        IAccesscs _prizeNumberAccess;
         public LotteryNumberController()
         {
             _lotteryDataRegularization = new LotteryDataRegularization();
@@ -34,30 +36,30 @@ namespace FinalProject.Controllers
         [HttpGet]
         public IActionResult Index(string year, string month)
         {
-
-            getPrizeNumberList(year, month);
-            if (_prizeNumberList != null && _prizeNumberList.Count != 0)
+            month = _lotteryDataRegularization.regularizeMonth(month);
+            bool IsPrizeNumberExist = _eFPrizeNumberRepository.IsDataExist(year, month);
+            if (IsPrizeNumberExist)
             {
-                _prizeNumberList = _lotteryDataRegularization.regularString(_prizeNumberList);
-                month = _lotteryDataRegularization.regularizeMonth(month);
-                saveData(year, month);
-                _prizeNumber.SpecialPrize = _prizeNumberList[0];
-                _prizeNumber.GrandPrize = _prizeNumberList[1];
-                _prizeNumber.FirstPrize = new List<string>();
-                _prizeNumber.AddtionalSixthPrize = new List<string>();
-                for (int i = 2; i < 5; i++)
-                {
-                    _prizeNumber.FirstPrize.Add(_prizeNumberList[i]);
-                }
-                for (int i = 5; i < _prizeNumberList.Count; i++)
-                {
-                    _prizeNumber.AddtionalSixthPrize.Add(_prizeNumberList[i]);
-                }
+                _prizeNumberAccess = new AcessDB();
+                _prizeNumberList = _prizeNumberAccess.getPrizeNumber(year, month);
+                setShowingParameter();
                 showPrizeInfo(_prizeNumber);
             }
             else
             {
-                ViewBag.NULL = "請輸入日期資訊。";
+                _prizeNumberAccess = new AccessWEB();
+                _prizeNumberList = _prizeNumberAccess.getPrizeNumber(year, month);
+                if (_prizeNumberList != null && _prizeNumberList.Count != 0)
+                {
+                    _prizeNumberList = _lotteryDataRegularization.regularString(_prizeNumberList);
+                    saveData(year, month);
+                    setShowingParameter();
+                    showPrizeInfo(_prizeNumber);
+                }
+                else
+                {
+                    ViewBag.NULL = "請輸入日期資訊。";
+                }
             }
             return View();
         }
@@ -79,7 +81,18 @@ namespace FinalProject.Controllers
             ResultParsing resultParsing;
             #endregion
 
-            getPrizeNumberList(userInfo.Year, userInfo.Month);
+            userInfo.Month = _lotteryDataRegularization.regularizeMonth(userInfo.Month);
+            bool IsPrizeNumberExist = _eFPrizeNumberRepository.IsDataExist(userInfo.Year, userInfo.Month);
+            if (IsPrizeNumberExist)
+            {
+                _prizeNumberAccess = new AcessDB();
+                _prizeNumberList = _prizeNumberAccess.getPrizeNumber(userInfo.Year, userInfo.Month);
+            }
+            else
+            {
+                _prizeNumberAccess = new AccessWEB();
+                _prizeNumberList = _prizeNumberAccess.getPrizeNumber(userInfo.Year, userInfo.Month);
+            }
             if (_prizeNumberList != null && _prizeNumberList.Count != 0)
             {
                 _prizeNumberList = _lotteryDataRegularization.regularString(_prizeNumberList);
@@ -90,26 +103,12 @@ namespace FinalProject.Controllers
                 userResponse = new UserResponse();
                 result = lotteryNumber.decidePrizeType(_prizeNumberList);
                 resultParsing = new ResultParsing();
-                userResponse.WonNumbers= resultParsing.getWiningNumber(result);
+                userResponse.WonNumbers = resultParsing.getWiningNumber(result);
                 userResponse.WonName = resultParsing.getWiningNumberName(result);
                 userResponse.LosedNumber = resultParsing.getLosedNumber(userData, result);
                 showResult(userResponse);
             }
             return View();
-        }
-
-        private void getPrizeNumberList(string year, string month)
-        {
-            month = _lotteryDataRegularization.regularizeMonth(month);
-            string urlAddress = "https://www.etax.nat.gov.tw/etw-main/web/ETW183W2_" +
-               year + month + "/";
-            WebService webService = new WebService();
-            string html = webService.getHTML(urlAddress, Encoding.UTF8);
-            if (html != "")
-            {
-                HtmlService htmlService = new HtmlService(html);
-                _prizeNumberList = htmlService.getPrizeNumber();
-            }
         }
 
         private void  saveData(string year, string month)
@@ -127,6 +126,22 @@ namespace FinalProject.Controllers
                 _prizeNumberDto.Year = year;
                 _prizeNumberDto.Month = month;
                 _eFPrizeNumberRepository.Insert(_prizeNumberDto);
+            }
+        }
+
+        private void setShowingParameter()
+        {
+            _prizeNumber.SpecialPrize = _prizeNumberList[0];
+            _prizeNumber.GrandPrize = _prizeNumberList[1];
+            _prizeNumber.FirstPrize = new List<string>();
+            _prizeNumber.AddtionalSixthPrize = new List<string>();
+            for (int i = 2; i < 5; i++)
+            {
+                _prizeNumber.FirstPrize.Add(_prizeNumberList[i]);
+            }
+            for (int i = 5; i < _prizeNumberList.Count; i++)
+            {
+                _prizeNumber.AddtionalSixthPrize.Add(_prizeNumberList[i]);
             }
         }
 

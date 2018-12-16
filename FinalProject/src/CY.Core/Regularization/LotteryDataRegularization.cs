@@ -9,10 +9,18 @@ namespace CY.Core.Regularization
     {
         private List<string> _userData;
         private List<string> _prizeNumberData;
+        private List<string> _DBData;
         public LotteryDataRegularization()
         {
             _userData = new List<string>();
             _prizeNumberData = new List<string>();
+            _DBData = new List<string>();
+        }
+
+        public List<string> processDBData(string DBData)
+        {
+            _DBData = DBData.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            return _DBData;
         }
 
         public List<string> processUserData(string userData)

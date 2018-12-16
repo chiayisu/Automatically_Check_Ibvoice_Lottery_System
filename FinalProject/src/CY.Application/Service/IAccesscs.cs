@@ -7,6 +7,6 @@ namespace CY.Application.Service
 {
     public interface IAccesscs
     {
-        List<PrizeNumberDto> getPrizeNumber(string year, string month);
+        List<string> getPrizeNumber(string year, string month);
     }
 }
