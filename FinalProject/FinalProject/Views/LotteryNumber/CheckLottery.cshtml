@@ -1,0 +1,87 @@
+﻿@model CY.Core.Models.UserInfo
+
+@{
+    ViewData["Title"] = "統一發票自動對獎";
+}
+
+<h2>統一發票自動對獎</h2>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CheckLottery">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"><h3>年份</h3></label>
+                <input asp-for="Year" class="form-control" style=" font-size: 1.5em;"/>
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Month" class="control-label"><h3>月份</h3></label>
+                <input asp-for="Month" class="form-control"style="font-size: 1.5em;"/>
+                <span asp-validation-for="Month" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserLotteryNumbernth" class="control-label"><h3>對獎號碼</h3></label>
+                <textarea asp-for="UserLotteryNumbernth" class="form-control" rows="15" cols="50" style=" resize:none;  font-size: 1.5em;"></textarea>
+                <span asp-validation-for="UserLotteryNumbernth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" class =" btn btn-primary"value="對獎" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th><h3>發票號碼</h3></th>
+            <th><h3>中獎類別</h3></th>
+        </tr>
+    </thead>
+
+
+    @if (@ViewBag.WonNumbers != null)
+    {
+        <tbody>
+            @for (var index = 0; index < @ViewBag.WonNumbers.Count; index++)
+            {
+
+                <tr>
+                    <td><h3>@ViewBag.WonNumbers[index]</h3></td>
+                    <td><h3>@ViewBag.WonNames[index]</h3></td>
+                </tr>
+            }
+            </tbody>
+           }
+            else if (@ViewBag.LosedNumbers != null)
+            {
+        <tbody>
+            @foreach (var losedNumber in @ViewBag.LosedNumbers)
+            {
+
+                <tr>
+                    <td><h3>@losedNumber</h3></td>
+                    <td><h3>未中獎</h3></td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        <h2> 請輸入資料。</h2>
+
+    }
+      
+    </table>
+
+
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

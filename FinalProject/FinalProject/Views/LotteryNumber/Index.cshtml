@@ -1,0 +1,147 @@
+﻿
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>對獎號碼</h2>
+<form asp-controller="LotteryNumber" asp-action="Index" method="get">
+    <!--Title: <input type="text" name="date">-->
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="inputEmail4">年份</label>
+            <input type="text" class="form-control" id="inputEmail4" placeholder="年份" name="year">
+        </div>
+        <div class="form-group col-md-2">
+            <label for="inputEmail4">月份</label>
+            <input type="text" class="form-control" id="inputPassword4" placeholder="月份" name="month"><p>
+        </div>
+        <br />
+    </div>
+    <p>
+        <button type="submit" class="btn btn-primary">送出</button>
+        <br />
+        <br />
+
+</form>
+@if (string.IsNullOrEmpty(@ViewBag.NULL))
+{
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <h3>特別獎</h3>
+                </td>
+                <td>
+                    <h3>@ViewBag.SpecialPrize</h3>
+                </td>
+            </tr>
+
+        </tbody>
+
+        <tbody>
+            <tr>
+                <td>
+                    <h3>特獎</h3>
+                </td>
+                <td>
+                    <h3>@ViewBag.GrandPrize</h3>
+                </td>
+            </tr>
+
+        </tbody>
+
+        <tbody>
+            <tr>
+                <td>
+                    <h3>頭獎</h3>
+                </td>
+                <td>
+                    @if (@ViewBag.FirstPrizes != null)
+                    {
+                        @foreach (var FirstPrize in @ViewBag.FirstPrizes)
+                        {
+                            <h3>@FirstPrize</h3>
+                        }
+                    }
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <h3>二獎</h3>
+                </td>
+                <td>
+                    <h3>同期統一發票收執聯末7 位數號碼與頭獎中獎號碼末7 位相同者各得獎金4萬元</h3>
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <h3>三獎</h3>
+                </td>
+                <td>
+                    <h3>同期統一發票收執聯末6 位數號碼與頭獎中獎號碼末6 位相同者各得獎金1萬元</h3>
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <h3>四獎</h3>
+                </td>
+                <td>
+                    <h3>同期統一發票收執聯末5 位數號碼與頭獎中獎號碼末5 位相同者各得獎金4千元</h3>
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <h3>五獎</h3>
+                </td>
+                <td>
+                    <h3>同期統一發票收執聯末4 位數號碼與頭獎中獎號碼末4 位相同者各得獎金1千元</h3>
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <h3>六獎</h3>
+                </td>
+                <td>
+                    <h3>同期統一發票收執聯末3 位數號碼與 頭獎中獎號碼末3 位相同者各得獎金2百元</h3>
+                </td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>
+                    <h3>增開六獎</h3>
+                </td>
+                <td>
+                    @if (@ViewBag.AdditionSixthPrizes != null)
+                    {
+                        @foreach (var AdditionSixthPrize in @ViewBag.AdditionSixthPrizes)
+                        {
+                            <h3>@AdditionSixthPrize</h3>
+                        }
+                    }
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+}
+else
+{
+    <DIV style="text-align:left">
+        <h2>@ViewBag.NULL</h2>
+    </DIV>
+
+}
+
+<a class=" btn btn-primary" href="/LotteryNumber/CheckLottery">自動對獎</a>

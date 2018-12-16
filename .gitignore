@@ -3,3 +3,8 @@
 ################################################################################
 
 /FinalProject/.vs
+/FinalProject/FinalProject/bin/Debug/netcoreapp2.1
+/FinalProject/src/CY.Core/bin/Debug/netcoreapp2.1
+/FinalProject/src/CY.Core/obj
+/FinalProject/FinalProject/obj
+/FinalProject/src/CY.Core/CY.Core.csproj
