@@ -25,7 +25,10 @@ namespace CY.Core.Regularization
 
         public List<string> processUserData(string userData)
         {
-            _userData = userData.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if (!string.IsNullOrEmpty(userData))
+            {
+                _userData = userData.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
             return _userData;
         }
 

@@ -14,17 +14,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"><h3>年份</h3></label>
-                <input asp-for="Year" class="form-control" style=" font-size: 1.5em;"/>
+                <input asp-for="Year" class="form-control" style=" font-size: 1.5em;"placeholder="年份"/ >
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Month" class="control-label"><h3>月份</h3></label>
-                <input asp-for="Month" class="form-control"style="font-size: 1.5em;"/>
+                <input asp-for="Month" class="form-control"style="font-size: 1.5em;"placeholder="月份"/>
                 <span asp-validation-for="Month" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LotteryNumberInfo" class="control-label"><h3>對獎號碼</h3></label>
-                <textarea asp-for="LotteryNumberInfo" class="form-control" rows="15" cols="50" style=" resize:none;  font-size: 1.5em;"></textarea>
+                <textarea asp-for="LotteryNumberInfo" class="form-control" rows="15" cols="50" style=" resize:none;  font-size: 1.5em;" placeholder="對獎號碼"></textarea>
                 <span asp-validation-for="LotteryNumberInfo" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -68,11 +68,6 @@
             }
         </tbody>
     }
-    else
-    {
-        <h2> 請輸入資料。</h2>
-
-    }
       
     </table>
 
@@ -84,4 +79,25 @@
 
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script>
+            function check(year, month, lotteryNumberInfo) {
+                return (year === "" ||
+                    month === "" ||
+                    lotteryNumberInfo === "");
+            }
+            function Valid() {
+                Year = $('input[name = "Year"]').val();
+                Month = $('input[name = "Month"]').val();
+                LotteryNumberInfo = $('textarea[name = "LotteryNumberInfo"]').val();
+                if (check(Year, Month, LotteryNumberInfo)) {
+                    alert("資料不完整請將資料輸入完整。");
+                }
+            }
+            $(document).ready(function () {
+                $("form").on("submit", function () {
+                    Valid();
+                    return true;
+                });
+            });
+        </script>
     }

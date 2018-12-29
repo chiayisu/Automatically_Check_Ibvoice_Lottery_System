@@ -52,7 +52,7 @@ namespace FinalProject.Controllers
                 if (_prizeNumberList != null && _prizeNumberList.Count != 0)
                 {
                     _prizeNumberList = _lotteryDataRegularization.regularString(_prizeNumberList);
-                    saveData(year, month);
+                    InsertToDB(year, month);
                     setShowingParameter();
                     showPrizeInfo(_prizeNumber);
                 }
@@ -63,10 +63,9 @@ namespace FinalProject.Controllers
             }
             return View();
         }
-       [HttpGet]
+        [HttpGet]
         public IActionResult CheckLottery()
         {
-
             return View();
         }
 
@@ -111,7 +110,7 @@ namespace FinalProject.Controllers
             return View();
         }
 
-        private void  saveData(string year, string month)
+        private void  InsertToDB(string year, string month)
         {
             var IsDataExist = _eFPrizeNumberRepository.IsDataExist(year, month);
             if (!IsDataExist)

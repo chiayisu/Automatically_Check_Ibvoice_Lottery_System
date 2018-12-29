@@ -136,12 +136,26 @@
         </tbody>
     </table>
 }
-else
-{
-    <DIV style="text-align:left">
-        <h2>@ViewBag.NULL</h2>
-    </DIV>
-
-}
 
 <a class=" btn btn-primary" href="/LotteryNumber/CheckLottery">自動對獎</a>
+@section Scripts {
+    <script>
+            function check(year, month, lotteryNumberInfo) {
+                return (year === "" ||
+                    month === "");
+            }
+            function Valid() {
+                Year = $('input[name = "year"]').val();
+                Month = $('input[name = "month"]').val();
+                if (check(Year, Month)) {
+                    alert("資料不完整請將資料輸入完整。");
+                }
+            }
+            $(document).ready(function () {
+                $("form").on("submit", function () {
+                    Valid();
+                    return true;
+                });
+            });
+    </script>
+}
